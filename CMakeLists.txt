@@ -11,9 +11,6 @@ find_package(wiimote REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(joy REQUIRED)
 find_package(sensor_msgs REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
 
 add_executable(wii_wheel_teleop src/wii_wheel_teleop.cpp)
 ament_target_dependencies(
@@ -22,6 +19,7 @@ ament_target_dependencies(
   joy
   sensor_msgs
 )
+
 target_include_directories(wii_wheel_teleop PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)

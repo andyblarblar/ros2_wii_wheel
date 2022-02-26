@@ -3,9 +3,9 @@
 <package format="3">
   <name>wii_wheel</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="Andrew@Ealovega.dev">andy</maintainer>
-  <license>TODO: License declaration</license>
+  <description>ROS2 node that allows for teleop using a wii wheel. I'm using tilt controls!</description>
+  <maintainer email="Andrew@Ealovega.dev">Andrew Ealovega</maintainer>
+  <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
