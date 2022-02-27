@@ -1,0 +1,53 @@
+package_name = "wii_wheel"
+repo = "https://github.com/andyblarblar/ros2_wii_wheel"
+
+[[nodes]]
+node_name = 'wii_wheel_teleop'
+#Relitive to this file
+source_file = ['./src/wii_wheel_teleop.cpp']
+summary = '''
+Allows for teleop by tilting the wiimote like when using a wii wheel. This is implemented by intercepting the joy messages
+from the wiimote node. The included launch file launches this node for you. 
+
+During operation, move forward with 2, backward with B, increase speed with +, and decrease speed with -.
+'''
+
+[[nodes.publishes]]
+name = 'joy'
+description = 'The wheel joy messages.'
+
+[[nodes.publishes]]
+name = 'joy/set_feedback'
+description = 'Rumble control messages, sent when changing speed.'
+
+[[nodes.subscribes]]
+name = '/wiimote/joy'
+description = 'The original joy messages from the wiimote node.'
+
+[[nodes.params]]
+name = 'velocity'
+description = 'Starting speed. Default 1'
+
+[[nodes.params]]
+name = 'max_turn'
+description = 'Max angular speed. Default 3'
+
+[[nodes.params]]
+name = 'steering_ratio'
+description = 'Value the raw accelerometer data is divided by. Default 3'
+
+[nodes.launch]
+file_path = './launch/wheel_teleop.launch.py'
+usage = 'just launch I guess'
+
+[[nodes.launch.args]]
+name = 'velocity'
+description = 'Starting speed. Default 1'
+
+[[nodes.launch.args]]
+name = 'max_turn'
+description = 'Max angular speed. Default 3'
+
+[[nodes.launch.args]]
+name = 'steering_ratio'
+description = 'Value the raw accelerometer data is divided by. Default 3'
