@@ -38,7 +38,10 @@ description = 'Value the raw accelerometer data is divided by. Default 3'
 
 [nodes.launch]
 file_path = './launch/wheel_teleop.launch.py'
-usage = 'just launch I guess'
+usage = '''
+Launches both teleop and the wiimote node. The wiimote node will prompt for you to press 1+2 on a wiimote to connect it.
+This will only connect to gen1 pre wii motion plus inside wiimotes with a nunchuk in (I have no idea).
+'''
 
 [[nodes.launch.args]]
 name = 'velocity'

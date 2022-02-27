@@ -25,7 +25,9 @@ During operation, move forward with 2, backward with B, increase speed with +, a
 
 # Launch 
  `./launch/wheel_teleop.launch.py` 
- just launch I guess 
+ Launches both teleop and the wiimote node. The wiimote node will prompt for you to press 1+2 on a wiimote to connect it.
+This will only connect to gen1 pre wii motion plus inside wiimotes with a nunchuk in (I have no idea).
+ 
 
 ## Args
 - `velocity`: Starting speed. Default 1
