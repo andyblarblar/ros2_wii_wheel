@@ -23,6 +23,7 @@ def generate_launch_description():
         name='wii_wheel_teleop'
     )
 
+    # TODO add launch params for velocity ect.
     return LaunchDescription([
         wiimote,
         wheel_node

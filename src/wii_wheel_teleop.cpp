@@ -4,6 +4,7 @@
 #include <memory>
 #include <functional>
 #include <rclcpp/logging.hpp>
+#include <sensor_msgs/msg/detail/joy_feedback_array__struct.hpp>
 
 namespace WiiWheel
 {
@@ -16,8 +17,13 @@ namespace WiiWheel
 
         wheel_joy_pub = this->create_publisher<sensor_msgs::msg::Joy>(
             "joy", rclcpp::SystemDefaultsQoS());
+            
+        joy_feedback_pub = this->create_publisher<sensor_msgs::msg::JoyFeedbackArray>(
+            "joy/set_feedback", rclcpp::SystemDefaultsQoS());
 
         velocity = this->declare_parameter("velocity", 1);       
+        max_turn = this->declare_parameter("max_turn", 3);       
+        steering_ratio = this->declare_parameter("steering_ratio", 3);       
     }
 
     void WiiWheelTeleop::wii_joy_callback(const sensor_msgs::msg::Joy::SharedPtr msg)
@@ -40,12 +46,21 @@ namespace WiiWheel
 
       sent_zero_msg = false;
 
+      static bool rumbled_last = false;
       // The plus and minus buttons change speed
       if (msg->buttons[4]) {
         velocity++;
+        send_next_vibrate_cmd(true);
+        rumbled_last = true;
       }
-      else if (msg->buttons[5] && velocity > 0){
+      else if (msg->buttons[5] && velocity > 1){
         velocity--;
+        send_next_vibrate_cmd(false);
+        rumbled_last = true;
+      }
+      else if (rumbled_last) {
+        send_clear_vibrate_cmd();
+        rumbled_last = false;
       }
 
       // If 2 is held down, then accelerate
@@ -56,7 +71,7 @@ namespace WiiWheel
         msg->axes[1] = velocity;
 
         //Clamp turn to ensure we dont spin out
-        msg->axes[0] = std::clamp(msg->axes[0]/5.f, -5.f, 5.f);
+        msg->axes[0] = std::clamp(msg->axes[0]/steering_ratio, -max_turn, max_turn);
 
         wheel_joy_pub->publish(*msg);
         return;
@@ -69,7 +84,7 @@ namespace WiiWheel
         msg->axes[1] = -velocity;
 
         //Clamp turn to ensure we dont spin out
-        msg->axes[0] = std::clamp(msg->axes[0]/5.f, -5.f, 5.f);
+        msg->axes[0] = std::clamp(msg->axes[0]/steering_ratio, -max_turn, max_turn);
 
         wheel_joy_pub->publish(*msg);
         return;
