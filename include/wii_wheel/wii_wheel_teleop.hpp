@@ -11,10 +11,14 @@ namespace WiiWheel
     {
     public:
         explicit WiiWheelTeleop(rclcpp::NodeOptions options);
+        float velocity{1};
 
     private:
-        void wii_joy_callback(const sensor_msgs::msg::Joy::ConstSharedPtr msg);    
+        void wii_joy_callback(const sensor_msgs::msg::Joy::SharedPtr msg);    
         rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr wii_joy_sub;
         rclcpp::Publisher<sensor_msgs::msg::Joy>::SharedPtr wheel_joy_pub;
+
+        /// If a zeroed joy message was sent after buttons stoped being pressed.
+        bool sent_zero_msg{false};
     };
 }
