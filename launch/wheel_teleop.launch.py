@@ -9,6 +9,7 @@ from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 
+
 def generate_launch_description():
     pkg_wheel = get_package_share_directory('wii_wheel')
 
@@ -18,17 +19,17 @@ def generate_launch_description():
     )
 
     velocity = LaunchConfiguration('velocity', default=1)
-    max_turn = LaunchConfiguration("max_turn", default = 3)
-    steering_ratio = LaunchConfiguration("steering_ratio", default = 3)
+    max_turn = LaunchConfiguration("max_turn", default=3)
+    steering_ratio = LaunchConfiguration("steering_ratio", default=3)
 
     wheel_node = Node(
         package='wii_wheel',
         executable='wii_wheel_teleop',
         name='wii_wheel_teleop',
         parameters=[{
-            "velocity" : velocity,
-            "max_turn" : max_turn,
-            "steering_ratio" : steering_ratio
+            "velocity": velocity,
+            "max_turn": max_turn,
+            "steering_ratio": steering_ratio
         }]
     )
 

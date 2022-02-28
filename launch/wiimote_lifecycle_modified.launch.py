@@ -32,22 +32,24 @@ def generate_launch_description():
         name=wiimote_node_name,
         output='screen',
         parameters=[
-            FindPackageShare('wiimote').find('wiimote') + '/config/wiimote_params.yaml'
+            FindPackageShare('wiimote').find('wiimote') +
+            '/config/wiimote_params.yaml'
         ],
-        remappings=
-            [('joy', '/wiimote/joy'), 
-            ('/imu/data', '/wiimote/imu/data'), 
-            ('/imu/is_calibrated', '/wiimote/imu/is_calibrated')]
+        remappings=[('joy', '/wiimote/joy'),
+                    ('/imu/data', '/wiimote/imu/data'),
+                    ('/imu/is_calibrated', '/wiimote/imu/is_calibrated')]
     )
 
     configure_wiimote = launch.actions.EmitEvent(event=launch_ros.events.lifecycle.ChangeState(
-        lifecycle_node_matcher=launch_ros.events.lifecycle.matches_node_name('/wiimote'),
+        lifecycle_node_matcher=launch_ros.events.lifecycle.matches_node_name(
+            '/wiimote'),
         transition_id=lifecycle_msgs.msg.Transition.TRANSITION_CONFIGURE
     ), condition=UnlessCondition(
         PythonExpression(["'", LaunchConfiguration('state'), "'=='unconfigured'"])))
 
     activate_wiimote = launch.actions.EmitEvent(event=launch_ros.events.lifecycle.ChangeState(
-        lifecycle_node_matcher=launch_ros.events.lifecycle.matches_node_name('/wiimote'),
+        lifecycle_node_matcher=launch_ros.events.lifecycle.matches_node_name(
+            '/wiimote'),
         transition_id=lifecycle_msgs.msg.Transition.TRANSITION_ACTIVATE
     ))
 
@@ -66,7 +68,8 @@ def generate_launch_description():
             PythonExpression(["'", LaunchConfiguration('state'), "'=='active'"])))
 
     return launch.LaunchDescription([
-        launch.actions.DeclareLaunchArgument(name='emulate_tty', default_value='True'),
+        launch.actions.DeclareLaunchArgument(
+            name='emulate_tty', default_value='True'),
         launch.actions.DeclareLaunchArgument(
             name='state',
             default_value='active',
