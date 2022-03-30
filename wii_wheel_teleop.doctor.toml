@@ -36,7 +36,7 @@ description = 'Max angular speed. Default 3'
 name = 'steering_ratio'
 description = 'Value the raw accelerometer data is divided by. Default 3'
 
-[nodes.launch]
+[[nodes.launch]]
 file_path = './launch/wheel_teleop.launch.py'
 usage = '''
 Launches both teleop and the wiimote node. The wiimote node will prompt for you to press 1+2 on a wiimote to connect it.
