@@ -16,7 +16,9 @@ namespace WiiWheel
     public:
         explicit WiiWheelTeleop(rclcpp::NodeOptions options);
         /// Constant linear velocity
-        float velocity{1};
+        float velocity{1.};
+        /// The change in velocity applied for each shift
+        float dvelocity{1.};
         /// Max angular velocity
         float max_turn{3};
         /// Value we divide the raw accelerometer value by

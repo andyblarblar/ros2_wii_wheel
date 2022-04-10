@@ -9,6 +9,8 @@ from the wiimote node. The included launch file launches this node for you.
 
 During operation, move forward with 2, backward with B, increase speed with +, and decrease speed with -.
 
+Other button presses will be passed through the node to allow for downstream button mappings.
+
 ## Topics
 
 ### Publishes
@@ -19,9 +21,9 @@ During operation, move forward with 2, backward with B, increase speed with +, a
 - `/wiimote/joy`: The original joy messages from the wiimote node.
 
 ## Params
-- `velocity`: Starting speed. Default 1
+- `dvelocity`: Change in velocity for each shift. Default 1
 - `max_turn`: Max angular speed. Default 3
-- `steering_ratio`: Value the raw accelerometer data is divided by. Default 3
+- `steering_ratio`: Value the raw accelerometer data is divided by. Default 4
 
 # Launch
 ## File 
@@ -29,9 +31,10 @@ During operation, move forward with 2, backward with B, increase speed with +, a
  
  Launches both teleop and the wiimote node. The wiimote node will prompt for you to press 1+2 on a wiimote to connect it.
 This will only connect to gen1 pre wii motion plus inside wiimotes with a nunchuk in (I have no idea).
+ 
 
 ### Args
-- `velocity`: Starting speed. Default 1
+- `dvelocity`: Change in velocity for each shift. Default 1
 - `max_turn`: Max angular speed. Default 3
-- `steering_ratio`: Value the raw accelerometer data is divided by. Default 3
+- `steering_ratio`: Value the raw accelerometer data is divided by. Default 4
 

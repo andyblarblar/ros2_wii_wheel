@@ -18,16 +18,16 @@ def generate_launch_description():
             os.path.join(pkg_wheel, 'launch', 'wiimote_lifecycle_modified.launch.py'))
     )
 
-    velocity = LaunchConfiguration('velocity', default=1)
+    dvelocity = LaunchConfiguration('dvelocity', default=1.0)
     max_turn = LaunchConfiguration("max_turn", default=3)
-    steering_ratio = LaunchConfiguration("steering_ratio", default=3)
+    steering_ratio = LaunchConfiguration("steering_ratio", default=4)
 
     wheel_node = Node(
         package='wii_wheel',
         executable='wii_wheel_teleop',
         name='wii_wheel_teleop',
         parameters=[{
-            "velocity": velocity,
+            "dvelocity": dvelocity,
             "max_turn": max_turn,
             "steering_ratio": steering_ratio
         }]

@@ -21,9 +21,9 @@ namespace WiiWheel
         joy_feedback_pub = this->create_publisher<sensor_msgs::msg::JoyFeedbackArray>(
             "joy/set_feedback", rclcpp::SystemDefaultsQoS());
 
-        velocity = this->declare_parameter("velocity", 1);       
+        dvelocity = this->declare_parameter("dvelocity", 1.);       
         max_turn = this->declare_parameter("max_turn", 3);       
-        steering_ratio = this->declare_parameter("steering_ratio", 3);       
+        steering_ratio = this->declare_parameter("steering_ratio", 4);       
     }
 
     void WiiWheelTeleop::wii_joy_callback(const sensor_msgs::msg::Joy::SharedPtr msg)
@@ -33,7 +33,7 @@ namespace WiiWheel
       //Button 4 is speed up, button 5 is speed down
  
       // Early return if nothing is pressed, but send zero message first to avoid joy getting 'stuck'.
-      if (!(msg->buttons[1] || msg->buttons[3] || msg->buttons[4] || msg->buttons[5])) {
+      if (!std::any_of(msg->buttons.begin(), msg->buttons.end(), [](bool button){return button;})) {
         if (!sent_zero_msg) {
           msg->axes[1] = 0.;
           msg->axes[0] = 0.;
@@ -49,12 +49,13 @@ namespace WiiWheel
       static bool rumbled_last = false;
       // The plus and minus buttons change speed
       if (msg->buttons[4]) {
-        velocity++;
+        velocity += dvelocity;
         send_next_vibrate_cmd(true);
         rumbled_last = true;
       }
-      else if (msg->buttons[5] && velocity > 1){
-        velocity--;
+      // Ensure we dont have negative speed
+      else if (msg->buttons[5] && velocity - dvelocity > 0){
+        velocity -= dvelocity;
         send_next_vibrate_cmd(false);
         rumbled_last = true;
       }
@@ -89,6 +90,13 @@ namespace WiiWheel
         wheel_joy_pub->publish(*msg);
         return;
       }
+      // Forward message with no velocity if any other button. This allows downstream mapping.
+      else {
+        msg->axes[0] = 0.;
+        msg->axes[1] = 0.;
+        msg->axes[2] = 0.;
+        wheel_joy_pub->publish(*msg);
+      }
     }
 }
 
@@ -99,8 +107,6 @@ int main(int argc, char *argv[])
     rclcpp::NodeOptions options;
     auto wheel_node = std::make_shared<WiiWheel::WiiWheelTeleop>(options);
     exec.add_node(wheel_node);
-
-    RCLCPP_INFO(wheel_node->get_logger(), "I'm using tilt controls!");
     
     exec.spin();
     rclcpp::shutdown();
